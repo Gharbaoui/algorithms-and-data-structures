@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+// sometimes i need random numbers
+
 
 int main(int argc, char **argv)
 {
