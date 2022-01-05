@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <stack>
+#include <queue>
+#include <list>
 
 //	[0]-----[1]----[2]
 //	| ______| |	|
@@ -92,6 +94,50 @@ class Graph
 			pr_dfs_iter(start);
 			std::cout << std::endl;
 		}
+
+
+		void	bfs_traversal(int start)
+		{
+			for (int i = 0; i < MX_EDGES + 1; ++i)
+				visited[i] = false;
+			pr_bfs(start);
+			std::cout << std::endl;
+		}
+
+		void	shortes_path(int start, int end)
+		{
+			std::list<int> q, prev;
+			Edge *tmp;
+
+			for (int i = 0; i < MX_EDGES + 1; ++i)
+				visited[i] = false;
+			
+			q.push_front(start);
+			prev.push_front(start);
+			visited[start] = true;
+			while (!q.empty())
+			{
+				tmp = edges[q.front()];
+				if (q.back() == end)
+					break ;
+				q.pop_front();
+				
+				while (tmp)
+				{
+					if (!visited[tmp->getId()])
+					{
+						prev.push_back(tmp->getId());
+						q.push_back(tmp->getId());
+						visited[tmp->getId()] = true;
+					}
+					if (tmp->getId() == end)
+						break ;
+					tmp = tmp->getNext();
+				}
+			}
+			q.clear();
+			trace_rout_back(prev);
+		}
 	private:
 		void	pr_dfs_rec(int start)
 		{
@@ -132,6 +178,72 @@ class Graph
 					tmp = tmp->getNext();
 				}
 			}
+		}
+
+		void	pr_bfs(int start)
+		{
+			bool	proccessed[MX_EDGES + 1];
+			std::queue<int> q;
+			int cur;
+			Edge *tmp;
+			
+			for (int i = 0; i < MX_EDGES + 1; ++i)
+				proccessed[i] = false;
+			q.push(start);
+			visited[start] = false;
+			while (!q.empty())
+			{
+				cur = q.front();
+				q.pop();
+				if (!proccessed[cur])
+				{
+					std::cout << cur << " ";
+					proccessed[cur] = true;
+				}
+				tmp  = edges[cur];
+				while (tmp)
+				{
+					if (!visited[tmp->getId()])
+					{
+						visited[tmp->getId()] = true;
+						q.push(tmp->getId());
+					}
+					tmp = tmp->getNext();
+				}
+			}
+		}
+
+
+		void	trace_rout_back(std::list<int> &q)
+		{
+			std::list<int> route;
+			int cur = q.back();
+			q.pop_back();
+			route.push_front(cur);
+
+			while (!q.empty())
+			{
+				if (is_linked_with_me(q.back(),cur))
+				{
+					cur = q.back();
+					route.push_front(cur);
+				}
+				q.pop_back();
+			}
+			for (int v : route)
+				std::cout << v << " ";
+		}
+
+		bool	is_linked_with_me(int id, int my_id)
+		{
+			Edge *tmp = edges[my_id];
+			while (tmp)
+			{
+				if (tmp->getId() == id)
+					return true;
+				tmp = tmp->getNext();
+			}
+			return false;
 		}
 
 
