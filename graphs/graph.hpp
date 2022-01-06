@@ -106,37 +106,36 @@ class Graph
 
 		void	shortes_path(int start, int end)
 		{
-			std::list<int> q, prev;
+			std::list<int> q;
+			int cur;
 			Edge *tmp;
+			std::list<std::pair<int, int> > prev;
 
 			for (int i = 0; i < MX_EDGES + 1; ++i)
 				visited[i] = false;
-			
 			q.push_front(start);
-			prev.push_front(start);
 			visited[start] = true;
 			while (!q.empty())
 			{
-				tmp = edges[q.front()];
+				cur = q.front();
 				if (q.back() == end)
 					break ;
 				q.pop_front();
-				
+				tmp = edges[cur];
 				while (tmp)
 				{
 					if (!visited[tmp->getId()])
 					{
-						prev.push_back(tmp->getId());
 						q.push_back(tmp->getId());
+						prev.push_back(std::make_pair(cur, tmp->getId()));
+						if (tmp->getId() == end)
+							break ;
 						visited[tmp->getId()] = true;
 					}
-					if (tmp->getId() == end)
-						break ;
 					tmp = tmp->getNext();
 				}
 			}
-			q.clear();
-			trace_rout_back(prev);
+			trace_rout_back(prev, start);
 		}
 	private:
 		void	pr_dfs_rec(int start)
@@ -214,24 +213,27 @@ class Graph
 		}
 
 
-		void	trace_rout_back(std::list<int> &q)
+		void	trace_rout_back(std::list<std::pair<int, int> > &q, int start)
 		{
+			int look_for;
 			std::list<int> route;
-			int cur = q.back();
-			q.pop_back();
-			route.push_front(cur);
 
+			route.push_front(q.back().second);
 			while (!q.empty())
 			{
-				if (is_linked_with_me(q.back(),cur))
+				look_for = q.back().first;
+				if (look_for == start)
 				{
-					cur = q.back();
-					route.push_front(cur);
+					route.push_front(look_for);
+					break ;
 				}
-				q.pop_back();
+				while (!q.empty() && q.back().second != look_for)
+					q.pop_back();
+				route.push_front(look_for);
 			}
 			for (int v : route)
 				std::cout << v << " ";
+			std::cout << std::endl;
 		}
 
 		bool	is_linked_with_me(int id, int my_id)

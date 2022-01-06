@@ -5,12 +5,17 @@
 int main()
 {
 	std::vector<std::pair<int, int> > v {
+		std::make_pair(3, 4),
 		std::make_pair(0, 1),  
 		std::make_pair(0, 2),
+		std::make_pair(0, 10),
+		std::make_pair(2, 10),
 		std::make_pair(1, 2),
 		std::make_pair(1, 3),
 		std::make_pair(1, 4),
 		std::make_pair(3, 5),
+		std::make_pair(3, 14),
+		std::make_pair(5, 14),
 		std::make_pair(5, 6),
 		std::make_pair(5, 7),
 		std::make_pair(7, 8),
