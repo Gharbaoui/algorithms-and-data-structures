@@ -173,7 +173,8 @@ class Graph
 				df.pop();
 				if (!proccessed[cur])
 				{
-					std::cout << cur << " ";
+					if (dfs_count(edges[cur]->getId(), cur) < nverteces - 1)
+						std::cout << cur << std::endl;
 					proccessed[cur] = true;
 				}
 				tmp = edges[cur];
@@ -188,6 +189,45 @@ class Graph
 				}
 			}
 			std::cout << std::endl;
+		}
+
+
+		int	dfs_count(int start, int avoid)
+		{
+			int count = 0;
+			std::stack<int> df;
+			bool	proccessed[MX_EDGES + 1], visit[MX_EDGES + 1];
+			int cur;
+			Edge *tmp;
+			for (int i = 0; i < MX_EDGES + 1; ++i)
+			{
+				proccessed[i] = false;
+				visit[i] = false;
+			}
+			df.push(start);
+			visit[start] = true;
+			while (!df.empty())
+			{
+				cur = df.top();
+				df.pop();
+				if (!proccessed[cur])
+				{
+					++count;
+					proccessed[cur] = true;
+				}
+				tmp = edges[cur];
+				while (tmp)
+				{
+					if (tmp->getId() != avoid && !visit[tmp->getId()])
+					{
+						df.push(tmp->getId());
+						visit[tmp->getId()] = true;
+					}
+					tmp = tmp->getNext();
+				}
+
+			}
+			return count;
 		}
 	private:
 		void	pr_dfs_rec(int start)
