@@ -137,6 +137,58 @@ class Graph
 			}
 			trace_rout_back(prev, start);
 		}
+		void	display()
+		{
+			Edge *tmp;
+			for (int i = 0; i < MX_EDGES + 1; ++i)
+			{
+				tmp = edges[i];
+				if (tmp)
+					std::cout << "\033[1;31m[" << i << "]\033[0m";
+				while (tmp)
+				{
+					std::cout << " -> (" << tmp->getId() << ")";
+					tmp = tmp->getNext();
+				}
+				if (edges[i])
+				std::cout << std::endl;
+			}
+		}
+		void	articilation_points(int start)
+		{
+			bool proccessed[MX_EDGES + 1];
+			std::stack <int> df;
+			int cur;
+			Edge *tmp;
+
+			for (int i = 0; i < MX_EDGES + 1; ++i) {
+				proccessed[i] = false;
+				visited[i] = false;
+			}
+			df.push(start);
+			visited[start] = true;
+			while (!df.empty())
+			{
+				cur = df.top();
+				df.pop();
+				if (!proccessed[cur])
+				{
+					std::cout << cur << " ";
+					proccessed[cur] = true;
+				}
+				tmp = edges[cur];
+				while (tmp)
+				{
+					if (!visited[tmp->getId()])
+					{
+						df.push(tmp->getId());
+						visited[tmp->getId()] = true;
+					}
+					tmp = tmp->getNext();
+				}
+			}
+			std::cout << std::endl;
+		}
 	private:
 		void	pr_dfs_rec(int start)
 		{
