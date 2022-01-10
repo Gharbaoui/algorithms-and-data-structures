@@ -18,14 +18,6 @@ int main()
 	};	
 	graph.Insert(ver.begin(), ver.end());
 
-	graph.display();
-	graph.DepthFirstTraversal(0, [] (int v) {
-		std::cout << v << "  ";
-	});
-	int count = 0;
-	graph.BreathFirstTraversal(0, [&] (int v) {
-		++count;
-		std::cout << v << "  ";
-	});
-	std::cout << count << std::endl;
+//	graph.display();
+	graph.BFShortestPath(0,6);
 }

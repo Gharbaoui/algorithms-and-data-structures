@@ -59,6 +59,9 @@ class Graph
 		void	BreathFirstTraversal(int start, const std::function <void (int)> &excute);
 		void	BFSAddNeighToBeProccessed(int index, std::list<int> &unProccessedVertices);
 
+		// shortest path using breath first search
+		void	BFShortestPath(int start, int end);
+		void	ReconstructRoute(std::list<std::pair<int, int>> &rout, int start, int end);
 		// display graph
 		void	display();
 	private:
