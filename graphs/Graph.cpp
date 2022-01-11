@@ -1,14 +1,16 @@
 #include "Graph.hpp"
 // constructors
-Graph::Graph(unsigned int nv, unsigned int ne)
+Graph::Graph(unsigned int nv, unsigned int ne, bool dir)
 {
+	aIsDirected = dir;
 	aNumvertices = nv;
 	aNumEdges = ne;
 	InitVertices(MX_VERTEX);
 }
 
-Graph::Graph()
+Graph::Graph(bool dir)
 {
+	aIsDirected = dir;
 	InitVertices(MX_VERTEX);
 }
 
@@ -38,7 +40,8 @@ void	Graph::InitVertices(int n)
 void	Graph::Insert(const std::pair<int,int> &edge)
 {
 	PrInsert(edge);
-	PrInsert(std::pair<int, int>(edge.second, edge.first));
+	if (!aIsDirected)
+		PrInsert(std::pair<int, int>(edge.second, edge.first));
 }
 
 void	Graph::PrInsert(const std::pair<int, int> &edge)

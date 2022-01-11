@@ -34,15 +34,15 @@ class	VertexInGraph
 		T		aVertexId;
 };
 
-// class for undirected graph data structure implmentation is adjacency list
+// class for graph data structure implmentation is adjacency list
 class Graph
 {
 	public:
 		// constructors
 		// default constructor
-		Graph();
+		Graph(bool dir=false);
 		// take first paramter as number of vertics second number of edges
-		Graph(unsigned int, unsigned int);
+		Graph(unsigned int, unsigned int, bool dir=false);
 		// operations functions
 		
 		// since in this situation i'm using int's as id of vertex 
@@ -62,6 +62,10 @@ class Graph
 		// shortest path using breath first search
 		void	BFShortestPath(int start, int end);
 		void	ReconstructRoute(std::list<std::pair<int, int>> &rout, int start, int end);
+
+		// topological sort
+		void	TopSort(int start);
+		bool	IsAllProccessed(int index) const;
 		// display graph
 		void	display();
 	private:
@@ -76,6 +80,7 @@ class Graph
 	private:
 		typedef	VertexInGraph<int>	Vertex;
 	private:
+		bool			aIsDirected;
 		Vertex			*apVertices[MX_VERTEX];
 		unsigned int		aNumvertices;
 		unsigned int		aNumEdges;
