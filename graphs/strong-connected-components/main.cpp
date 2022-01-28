@@ -3,20 +3,19 @@
 int	main()
 {
 	std::vector<std::vector<int>> edge{
-		{7, 2},
-		{2, 6},
-		{6, 3},
+		{1, 3},
+		{2, 1},
 		{3, 2},
-		{6, 7},
-		{3, 1},
-		{1, 5},
-		{5, 1},
-		{6, 4},
-		{4, 5}
+		{4, 3},
+		{5, 4},
+		{6, 5},
+		{5, 7},
+		{7, 6}
 	};
 
 	Solution s(edge, 8);
 
 	s.Display();
-	s.PrintStrongConnectedComponents();
+
+	s.kosarajuAlgo();
 }

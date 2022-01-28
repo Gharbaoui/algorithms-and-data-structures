@@ -17,11 +17,15 @@ class	Solution
 		void	PrintStrongConnectedComponents();
 		void	DFSReachTraget(int index, bool *visited, bool *done);
 		bool	FromCurToIndex(int start, int target);
+		void	kosarajuAlgo();
+		void	DFSBuild(int, bool*);
+		void	DFSBuildFinal(int, bool*);
 	private:
 		std::list<int>	dfs_stack;
 		std::list<int>	tmp_stack;
 		int nvertices;
 		std::vector<std::vector<int>>	graph;
+		std::vector<std::vector<int>>	Trasnsposegraph;
 };
 
 
