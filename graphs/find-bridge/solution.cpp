@@ -15,7 +15,7 @@ void	Solution::ConstructeFromList(const std::vector<std::vector<int>> &edges, in
 	for (int i = 0; i < size; ++i)
 	{
 		graph[edges[i][0]].push_back(edges[i][1]);
-		graph[edges[i][1]].push_back(edges[i][0]);
+		graph[edges[i][1]].push_back(edges[i][0]); // if you want directed graph remove this line
 	}
 }
 
@@ -25,7 +25,10 @@ void	Solution::Display() const
 
 	for (int i = 0; i < nvertices; ++i)
 	{
-		std::cout << "\033[1;31m{" << i << "}\033[0m";
+		if (graph[i].size())
+			std::cout << "\033[1;31m{" << i << "}\033[0m";
+		else
+			continue ;
 		for (int v : graph[i])
 			std::cout << " -> " << v;
 		std::cout << std::endl;
