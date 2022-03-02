@@ -1,40 +1,85 @@
 #include <iostream>
-#include <utility>
+#include <vector>
+#include <stdlib.h>
+#include <ctime>
+#include  <algorithm>
 
-void	insert_sort(int *arr, int size);
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &v)
+{
+	for (auto &val : v)
+		os << val << " ";
+	return os;
+}
+
+struct Gen
+{
+	Gen()
+	{
+		srand(time(0));
+	}
+	int	operator()()
+	{
+		return (rand() % 100) - (rand() % 50);
+	}
+};
+
+
+void	insertion_sort(std::vector<int> &A, int size)
+{
+	int smv;
+	int smi;
+	for (int i = 0; i <= size - 2; ++i)
+	{
+		smv = A[i];
+		smi = i;
+		for (int j = i + 1; j <= size - 1; ++j)
+		{
+			if (smv > A[j])
+			{
+				smv = A[j];
+				smi = j;
+			}
+		}
+		std::swap(A[i], A[smi]);
+	}
+}
+
+/*
+ 	complexity
+	outer loop will run n times where n = size - 2
+	stuff inside it at lines 34 35 44 are constants O(1)
+	and the loop that dependent on i
+	inner loop will run at (n - j) times ignoring 1 just for simplfication
+	at first will run (n + O(1)) times
+	at second will run (n - 1 + O(1)) times
+	at third will run (n - 2 + O(1)) times
+	.
+	.
+	.
+	at end will run (0 + O(1))
+	we could write total will be
+	(n + O(1)) + (n - 1 + O(1)) + . . . O(1)
+	reorgnize
+	(0 + 1 + 2 + 3 + . . . n) + ((O(1) + O(1) + O(1) + ...)n times)
+	first part will be 
+	n*(n-1)/2
+	second part will be 
+	n*O(1)
+	n^2 + n
+	so O(n^2) maybe i skip some steps unexplained
+ */
 
 int main()
 {
-	int	size;
-	std::cout << "enter size of array: ";
-	std::cin >> size;
-	int	arr[size];
-	srand(time (NULL));
-	std::cout << "Before\n";
-	for (int i = 0; i < size; ++i)
-	{
-		arr[i] = rand() % 1000;
-		std::cout << arr[i] << " ";
-	}
-	std::cout << std::endl;
+	std::vector<int> arr(20);
+	std::generate(arr.begin(), arr.end(), Gen());
 
-	std::cout << "After\n";
-	insert_sort(arr, size);
-	for (int i = 0; i < size; ++i)
-		std::cout << arr[i] << " ";
-	std::cout << std::endl;
-}
+	std::cout << arr << "\n";
+	std::cout << "is sorted: " << std::is_sorted(arr.begin(), arr.end()) << "\n";
 
-void	insert_sort(int *arr, int size)
-{
-	int	index(1);
+	insertion_sort(arr, arr.size());
+	std::cout << arr << "\n";
 
-
-	while (index < size)
-	{
-		for (int i = index; i > 0; --i)
-			if (arr[i - 1] > arr[i])
-				std::swap(arr[i], arr[i - 1]);
-		++index;
-	}
+	std::cout << "is sorted: " << std::is_sorted(arr.begin(), arr.end()) << "\n";
 }
