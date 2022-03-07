@@ -9,6 +9,8 @@ visited(number_of_vertxs, false)
 
 void	DFS_OR_BFS::operator()(const std::function<void(int)> &excute, bool is_dfs, int start)
 {
+	// BY THIS IMPLMENTATION DOES NOT LOOP OVER _GRAPH vector which means that if graph has multiple connected compnents i will expolre only what is connected to start node
+	//
 	std::list<int>	list;
 	int tmp;
 	list.push_back(start);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "DFS_OR_BFS.hpp"
+#include "path-finding.hpp"
 
 int main(int argc, char **argv)
 {
@@ -19,17 +20,12 @@ int main(int argc, char **argv)
 	Graph g(file);
 	std::cout << g;
 
-	// trying dfs
-	DFS_OR_BFS	dfs_algo(file);
+	PathFinding path(file);
 
-	dfs_algo([](int value)
+	path(0, 4, [](int vertex)
 	{
-		std::cout << value << " ";
+		std::cout << vertex << " ";
 	});
-	std::cout << "\n";
-	dfs_algo([](int value)
-	{
-		std::cout << value << " ";
-	}, false);
+
 
 }
