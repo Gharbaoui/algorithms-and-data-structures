@@ -1,4 +1,4 @@
-graph: Graph-Api.cpp main.cpp DFS_OR_BFS.cpp conncet-check.cpp
+graph: Graph-Api.cpp main.cpp
 	g++ --std=c++14 -ggdb3  *.cpp -o graph
 
 re : clean graph

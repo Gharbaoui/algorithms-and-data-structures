@@ -8,7 +8,7 @@ Graph::Graph(std::fstream &gr_info, bool dir)
 	 */
 	std::map<int, char> mp;
 	int tmp;
-	int v1, v2;
+	int v1, v2, w;
 	is_directed = dir;
 	number_of_edges = 0;
 	std::string str(100, 0);
@@ -20,7 +20,7 @@ Graph::Graph(std::fstream &gr_info, bool dir)
 
 	
 	number_of_edges = std::stoi(str);
-	if (!is_directed)
+	if (is_directed)
 		_graph.resize(number_of_edges + 1);
 	else
 		_graph.resize((number_of_edges * 2) + 1);
@@ -35,22 +35,28 @@ Graph::Graph(std::fstream &gr_info, bool dir)
 
 		v1 = std::stoi(str);
 		v2 = std::stoi(str.c_str() + tmp + 1);
-		this->insert({v1, v2});
+		tmp = str.find_first_of(" ", tmp + 1);
+		tmp = str.find_first_not_of(" ", tmp);
+		w = std::stoi(str.c_str() + tmp);
+		this->insert(v1, {v2, w});
 		mp.insert({v1, 'c'});
 		mp.insert({v2, 'c'});
 	}
 	gr_info.seekg(0);
 	number_of_vertxs = mp.size();
+	_dists.clear();
+	_dists.resize(number_of_vertxs);
 }
 
-void	Graph::insert(const std::pair<int, int> &edge)
+void	Graph::insert(int start, const std::pair<int, int> &edge)
 {
-	_graph[edge.first].push_back(edge.second);
+	// second pair represent weight
+	_graph[start].push_back(edge);
 	if (!is_directed)
-		_graph[edge.second].push_back(edge.first);
+		_graph[edge.first].push_back({start, edge.second});
 }
 
-std::vector<int>		&Graph::get_neighbors(int index)
+std::vector<std::pair<int, int>>		&Graph::get_neighbors(int index)
 {
 	return _graph[index];
 }
@@ -73,10 +79,6 @@ int						Graph::degree_of(int index) const
 
 void					Graph::display_neighbors_of(int vertex)
 {
-	size_t i;
-	for (i = 0; i < _graph[vertex].size() - 1; ++i)
-		std::cout << _graph[vertex][i] << ", ";
-	std::cout << _graph[vertex][i] << "\n";
 
 }
 
@@ -100,12 +102,42 @@ std::ostream&	operator<<(std::ostream &os, const Graph &g)
 		{
 			os << "\033[32m[" << index << "] -> \033[0m";
 			for (i = 0; i < vect.size() - 1; ++i)
-				os << vect[i] << ", ";
-			os << vect[i];
+				os << "[" << vect[i].first << ", " << vect[i].second << "] , ";
+			os << "[" << vect[i].first << ", " << vect[i].second << "]";
 			os << "\n";
 		}
 		++index;
 	}
 	os << "number of vertces: " << g.number_of_vertxs << "  number of edges: " << g.number_of_edges << "\n";
 	return os;
+}
+
+
+void	Graph::bellman_ford(const std::function<void (std::pair<int, int>)> &excute, int start)
+{
+	_dists.assign(number_of_vertxs, 1000);
+	_dists[start] = 0;
+	
+	unsigned int cur_weight;
+	unsigned int tmp_dist;
+
+	for (size_t i = 0; i < number_of_vertxs; ++i)
+	{
+		if (not _graph[i].size())
+			continue ;
+		cur_weight = _dists[i];
+		for (auto &pair : _graph[i])
+		{
+			tmp_dist = cur_weight + pair.second;
+			if (tmp_dist < _dists[pair.first])
+			{
+				_dists[pair.first] = tmp_dist;
+			}
+		}
+	}
+
+	for (size_t i = 0; i < number_of_vertxs; ++i)
+	{
+		excute({i, _dists[i]});
+	}
 }

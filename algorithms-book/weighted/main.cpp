@@ -1,8 +1,6 @@
 #include <iostream>
-#include "displayer.hpp"
-#include "DFS_OR_BFS.hpp"
-#include "path-finding.hpp"
-#include "conncet-check.hpp"
+#include "Graph-Api.hpp"
+
 
 int main(int argc, char **argv)
 {
@@ -20,25 +18,14 @@ int main(int argc, char **argv)
 	if (!file.is_open())
 		return 12;
 
-	Graph g(file);
+	Graph g(file, true);
 	std::cout << g;
 
 
-	ConnectCheck c(file);
-
-
-	c(res);
-
-
-	std::cout << res;
-
-
-
-	std::cout << "directed graph\n";
-	Graph gd(file, true);
-
-
-	std::cout << gd;
+	g.bellman_ford([] (std::pair<int, int> pair)
+	{
+		std::cout << pair.first << ", " << pair.second << "\n";
+	});
 
 
 }
