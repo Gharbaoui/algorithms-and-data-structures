@@ -43,6 +43,11 @@ Graph::Graph(std::fstream &gr_info, bool dir)
 		mp.insert({v2, 'c'});
 	}
 	gr_info.seekg(0);
+	auto itr = mp.rbegin();
+	max_vertex = itr->first;
+	itr = mp.rend();
+	--itr;
+	min_vertex = itr->first;
 	number_of_vertxs = mp.size();
 	_dists.clear();
 	_dists.resize(number_of_vertxs);
@@ -115,28 +120,35 @@ std::ostream&	operator<<(std::ostream &os, const Graph &g)
 
 void	Graph::bellman_ford(const std::function<void (std::pair<int, int>)> &excute, int start)
 {
-	_dists.assign(number_of_vertxs, 1000);
+	const auto max = std::numeric_limits<int>::max();
+	_dists.assign(max_vertex + 1, max);
 	_dists[start] = 0;
-	
-	unsigned int cur_weight;
-	unsigned int tmp_dist;
+	bool	changed;
+	int tmp_dist;
 
-	for (size_t i = 0; i < number_of_vertxs; ++i)
+	for (size_t i = min_vertex; i <= max_vertex; ++i)
 	{
-		if (not _graph[i].size())
-			continue ;
-		cur_weight = _dists[i];
-		for (auto &pair : _graph[i])
+		changed = false;
+		for (size_t i = min_vertex; i <= max_vertex; ++i)
 		{
-			tmp_dist = cur_weight + pair.second;
-			if (tmp_dist < _dists[pair.first])
+			if (!_graph[i].empty() && _dists[i] != max)
 			{
-				_dists[pair.first] = tmp_dist;
+				for (auto &pair : _graph[i])
+				{
+					tmp_dist = _dists[i] + pair.second;
+					if (tmp_dist < _dists[pair.first])
+					{
+						_dists[pair.first] = tmp_dist;
+						changed = true;
+					}
+				}
 			}
 		}
+		if (!changed)
+			break ;
 	}
-
-	for (size_t i = 0; i < number_of_vertxs; ++i)
+	
+	for (size_t i = min_vertex; i <= max_vertex; ++i)
 	{
 		excute({i, _dists[i]});
 	}

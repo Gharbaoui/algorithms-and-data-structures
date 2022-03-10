@@ -43,6 +43,8 @@ class Graph
 		bool							is_directed;
 		size_t							number_of_vertxs;
 		size_t							number_of_edges;
+		size_t							max_vertex;
+		size_t							min_vertex;
 		std::vector<std::vector<std::pair<int, int>>>	_graph;
 		std::vector<int>				_dists;
 };

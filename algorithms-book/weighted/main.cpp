@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	g.bellman_ford([] (std::pair<int, int> pair)
 	{
 		std::cout << pair.first << ", " << pair.second << "\n";
-	});
+	}, 3);
 
 
 }
