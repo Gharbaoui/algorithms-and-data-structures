@@ -38,7 +38,7 @@ class Graph
 		int						degree_of(int) const;
 		int						max_degree_of_graph() const;
 		void							insert(int start, const std::pair<int, int> &edge);
-		void					bellman_ford(const std::function<void (std::pair<int, int>)> &, int = 0);
+		void					bellman_ford(const std::function<void (std::pair<int, std::vector<int>>)> &, int = 0);
 	protected:
 		bool							is_directed;
 		size_t							number_of_vertxs;

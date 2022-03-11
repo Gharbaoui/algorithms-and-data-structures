@@ -1,0 +1,22 @@
+digraph flight
+{
+	node [color="#40e0d0", shape=circle, style=filled]
+	edge [color=red, minlen=4, penwidth=1]
+	rankdir = LR
+	1[color=blue, shape=square, xlable="start"]
+	7[color=blue, shape=square, xlabel="end"]
+	1 -> 2 [label="100", color="#DD0EEC"];
+	1 -> 3 [label="20"]; 
+	2 -> 6 [label="50"];
+	2 -> 5 [label="60"];
+	3 -> 5 [label="30"];
+	3 -> 4 [label="30"];
+	4 -> 5 [label="50"];
+	5 -> 2[label="10"]
+	4 -> 7 [label="500"];
+	5 -> 6 [label="100"];
+	5 -> 7 [label="300"];
+	6 -> 7 [label="200"]; 
+
+
+}

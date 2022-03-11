@@ -1,4 +1,5 @@
 #include "Graph-Api.hpp"
+void	construct_path(const std::vector<std::pair<short, short>> &routs, std::vector<int> &path, int target, int stop);
 
 Graph::Graph(std::fstream &gr_info, bool dir)
 {
@@ -118,15 +119,17 @@ std::ostream&	operator<<(std::ostream &os, const Graph &g)
 }
 
 
-void	Graph::bellman_ford(const std::function<void (std::pair<int, int>)> &excute, int start)
+void	Graph::bellman_ford(const std::function<void (std::pair<int, std::vector<int>>)> &excute, int start)
 {
 	const auto max = std::numeric_limits<int>::max();
+	std::vector<std::pair<short, short>>	routes(max_vertex + 1);
 	_dists.assign(max_vertex + 1, max);
 	_dists[start] = 0;
+	routes[start] = {0, 0};
 	bool	changed;
 	int tmp_dist;
 
-	for (size_t i = min_vertex; i <= max_vertex; ++i)
+	for (size_t j = min_vertex; j <= max_vertex; ++j)
 	{
 		changed = false;
 		for (size_t i = min_vertex; i <= max_vertex; ++i)
@@ -138,18 +141,39 @@ void	Graph::bellman_ford(const std::function<void (std::pair<int, int>)> &excute
 					tmp_dist = _dists[i] + pair.second;
 					if (tmp_dist < _dists[pair.first])
 					{
+						routes[pair.first] = {i, pair.first};
 						_dists[pair.first] = tmp_dist;
 						changed = true;
 					}
 				}
 			}
+
 		}
 		if (!changed)
 			break ;
 	}
-	
+	std::vector<int> path;
+
 	for (size_t i = min_vertex; i <= max_vertex; ++i)
 	{
-		excute({i, _dists[i]});
+		path.clear();
+		construct_path(routes, path, i, start);
+		excute({_dists[i], path});
 	}
+}
+
+
+void	construct_path(const std::vector<std::pair<short, short>> &routs, std::vector<int> &path, int target, int stop)
+{
+	size_t i;
+	for (i = 0; i < routs.size(); ++i)
+		if (routs[i].second == target)
+			break ;
+	path.push_back(target);
+	if (routs[i].first == stop)
+	{
+		path.push_back(routs[i].first);
+		return ;
+	}
+	construct_path(routs, path, routs[i].first, stop);
 }

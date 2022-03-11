@@ -22,10 +22,13 @@ int main(int argc, char **argv)
 	std::cout << g;
 
 
-	g.bellman_ford([] (std::pair<int, int> pair)
+	g.bellman_ford([] (std::pair<int, std::vector<int>> pair)
 	{
-		std::cout << pair.first << ", " << pair.second << "\n";
-	}, 3);
+		std::vector <int> &path = pair.second;
+		for (auto val : path)
+			std::cout << val << " ";
+		std::cout << " | total distance is: " << pair.first << "\n";
+	}, 1);
 
 
 }
